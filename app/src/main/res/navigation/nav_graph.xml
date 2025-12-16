@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ContactListFragment">
+
+    <fragment
+        android:id="@+id/ContactListFragment"
+        android:name="com.fibonacci.mycontactgue.ui.ContactListFragment"
+        android:label="@string/contact_list_label"
+        tools:layout="@layout/fragment_contact_list">
+        <action
+            android:id="@+id/action_ContactListFragment_to_ContactDetailFragment"
+            app:destination="@id/ContactDetailFragment" />
+        <action
+            android:id="@+id/action_ContactListFragment_to_CreateContactFragment"
+            app:destination="@id/CreateContactFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/callLogFragment"
+        android:name="com.fibonacci.mycontactgue.ui.CallLogFragment"
+        android:label="@string/call_log_label"
+        tools:layout="@layout/fragment_call_log" />
+
+    <fragment
+        android:id="@+id/remindersFragment"
+        android:name="com.fibonacci.mycontactgue.ui.RemindersFragment"
+        android:label="@string/reminders_label"
+        tools:layout="@layout/fragment_reminders" />
+
+    <fragment
+        android:id="@+id/ContactDetailFragment"
+        android:name="com.fibonacci.mycontactgue.ui.ContactDetailFragment"
+        android:label="@string/contact_detail_label"
+        tools:layout="@layout/fragment_contact_detail">
+        <argument
+            android:name="contact"
+            app:argType="com.fibonacci.mycontactgue.data.Contact" />
+        <action
+            android:id="@+id/action_ContactDetailFragment_to_CreateContactFragment"
+            app:destination="@id/CreateContactFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/CreateContactFragment"
+        android:name="com.fibonacci.mycontactgue.ui.CreateContactFragment"
+        android:label="@string/create_contact_label"
+        tools:layout="@layout/fragment_create_contact">
+        <argument
+            android:name="contactToEdit"
+            app:argType="com.fibonacci.mycontactgue.data.Contact"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+</navigation>
