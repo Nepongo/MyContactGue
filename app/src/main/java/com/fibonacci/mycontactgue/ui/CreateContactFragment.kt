@@ -1,11 +1,14 @@
 package com.fibonacci.mycontactgue.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,10 +26,19 @@ class CreateContactFragment : Fragment() {
 
     private val args: CreateContactFragmentArgs by navArgs()
     private var contactToEdit: Contact? = null
+    private var currentPhotoUri: Uri? = null
 
-    // Get the ViewModel
     private val contactViewModel: ContactViewModel by viewModels {
         ContactViewModelFactory((activity?.application as ContactsApplication).repository)
+    }
+
+    // Activity Result Launcher for picking an image
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            currentPhotoUri = it
+            binding.ivNewContactPhoto.setImageURI(it)
+            binding.tvAddPhotoLabel.visibility = View.GONE // Hide label after selecting image
+        }
     }
 
     override fun onCreateView(
@@ -45,6 +57,10 @@ class CreateContactFragment : Fragment() {
 
         setupToolbar()
         populateFormIfEditing()
+
+        binding.ivNewContactPhoto.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
 
         binding.btnSave.setOnClickListener {
             saveContact()
@@ -66,6 +82,12 @@ class CreateContactFragment : Fragment() {
             binding.etName.setText(it.name)
             binding.etPhone.setText(it.phoneNumber)
             binding.etEmail.setText(it.email)
+            it.photoUri?.let {
+                uriString ->
+                currentPhotoUri = uriString.toUri()
+                binding.ivNewContactPhoto.setImageURI(currentPhotoUri)
+                binding.tvAddPhotoLabel.visibility = View.GONE
+            }
         }
     }
 
@@ -82,13 +104,22 @@ class CreateContactFragment : Fragment() {
         }
 
         if (contactToEdit == null) {
-            // Create mode
-            val newContact = Contact(name = name, phoneNumber = phone, email = email, birthday = "") // Birthday is not implemented yet
+            val newContact = Contact(
+                name = name, 
+                phoneNumber = phone, 
+                email = email, 
+                birthday = "",
+                photoUri = currentPhotoUri?.toString()
+            )
             contactViewModel.insertContact(newContact)
             Toast.makeText(context, "Kontak $name disimpan", Toast.LENGTH_SHORT).show()
         } else {
-            // Edit mode
-            val updatedContact = contactToEdit!!.copy(name = name, phoneNumber = phone, email = email)
+            val updatedContact = contactToEdit!!.copy(
+                name = name, 
+                phoneNumber = phone, 
+                email = email,
+                photoUri = currentPhotoUri?.toString()
+            )
             contactViewModel.updateContact(updatedContact)
             Toast.makeText(context, "Kontak $name diperbarui", Toast.LENGTH_SHORT).show()
         }

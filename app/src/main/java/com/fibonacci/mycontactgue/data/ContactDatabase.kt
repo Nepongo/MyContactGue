@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Contact::class], version = 1, exportSchema = false)
+@Database(entities = [Contact::class, CallLog::class], version = 2, exportSchema = false) // ADDED CallLog & incremented version
 abstract class ContactDatabase : RoomDatabase() {
 
     abstract fun contactDao(): ContactDao
+    abstract fun callLogDao(): CallLogDao // ADDED this line
 
     companion object {
         @Volatile
@@ -20,7 +21,9 @@ abstract class ContactDatabase : RoomDatabase() {
                     context.applicationContext,
                     ContactDatabase::class.java,
                     "contact_database"
-                ).build()
+                )
+                .fallbackToDestructiveMigration() // ADDED for version increment
+                .build()
                 INSTANCE = instance
                 instance
             }

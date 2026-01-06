@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.fibonacci.mycontactgue.databinding.ActivityMainBinding
 
@@ -23,9 +24,11 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         navController = navHostFragment.navController
 
+        // THE FIX: Connect the NavController to the BottomNavigationView, not the BottomAppBar
         binding.bottomNavView.setupWithNavController(navController)
 
         binding.fab.setOnClickListener {
+            // The FAB should only work from the contact list screen
             if (navController.currentDestination?.id == R.id.ContactListFragment) {
                 navController.navigate(R.id.action_ContactListFragment_to_CreateContactFragment)
             }
@@ -36,11 +39,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.ContactListFragment,
                 R.id.callLogFragment,
                 R.id.remindersFragment -> {
-                    binding.bottomNavView.visibility = View.VISIBLE
+                    binding.bottomAppBar.visibility = View.VISIBLE
                     binding.fab.visibility = View.VISIBLE
                 }
                 else -> {
-                    binding.bottomNavView.visibility = View.GONE
+                    binding.bottomAppBar.visibility = View.GONE
                     binding.fab.visibility = View.GONE
                 }
             }

@@ -1,9 +1,16 @@
 package com.fibonacci.mycontactgue.ui
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +32,17 @@ class ContactDetailFragment : Fragment() {
         ContactViewModelFactory((activity?.application as ContactsApplication).repository)
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission is granted. Continue the action
+            initiateCall()
+        } else {
+            Toast.makeText(requireContext(), "Call permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,13 +58,53 @@ class ContactDetailFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         binding.toolbar.setupWithNavController(findNavController())
-        binding.toolbar.title = args.contact.name
 
         val contact = args.contact
-
+        binding.toolbar.title = contact.name
         binding.tvDetailName.text = contact.name
         binding.tvDetailPhone.text = contact.phoneNumber
         binding.tvDetailEmail.text = contact.email
+
+        contact.photoUri?.let {
+            binding.ivDetailPhoto.setImageURI(it.toUri())
+        }
+
+        binding.btnCall.setOnClickListener { checkCallPermission() }
+        binding.btnMessage.setOnClickListener { initiateMessage() }
+    }
+
+    private fun checkCallPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CALL_PHONE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                initiateCall()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.CALL_PHONE)
+            }
+        }
+    }
+
+    private fun initiateCall() {
+        val phoneNumber = args.contact.phoneNumber
+        if (phoneNumber.isNotBlank()) {
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
+            startActivity(intent)
+        } else {
+            Toast.makeText(requireContext(), "Phone number is not available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun initiateMessage() {
+        val phoneNumber = args.contact.phoneNumber
+        if (phoneNumber.isNotBlank()) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:$phoneNumber"))
+            startActivity(intent)
+        } else {
+            Toast.makeText(requireContext(), "Phone number is not available", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

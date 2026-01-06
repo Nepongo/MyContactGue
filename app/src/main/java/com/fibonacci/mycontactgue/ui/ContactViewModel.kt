@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.fibonacci.mycontactgue.data.Contact
 import com.fibonacci.mycontactgue.data.ContactRepository
@@ -11,10 +12,20 @@ import kotlinx.coroutines.launch
 
 class ContactViewModel(private val repository: ContactRepository) : ViewModel() {
 
-    val allContacts: LiveData<List<Contact>> = repository.allContacts
-    
-    private val _searchResults = MutableLiveData<List<Contact>>()
-    val searchResults: LiveData<List<Contact>> = _searchResults
+    private val _searchQuery = MutableLiveData<String>("")
+
+    // Use switchMap to react to changes in the search query.
+    val allContacts: LiveData<List<Contact>> = _searchQuery.switchMap { query ->
+        if (query.isNullOrEmpty()) {
+            repository.allContacts
+        } else {
+            repository.searchDatabase("%$query%")
+        }
+    }
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
 
     fun insertContact(contact: Contact) = viewModelScope.launch {
         repository.insert(contact)
@@ -26,13 +37,6 @@ class ContactViewModel(private val repository: ContactRepository) : ViewModel() 
 
     fun deleteContact(contact: Contact) = viewModelScope.launch {
         repository.delete(contact)
-    }
-    
-    fun searchContacts(query: String) {
-        val searchQuery = "%$query%"
-        repository.searchDatabase(searchQuery).observeForever { contacts ->
-            _searchResults.value = contacts
-        }
     }
 }
 

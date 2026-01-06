@@ -16,43 +16,37 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_contact_photo"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_default_person"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/iv_reminder_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_default_person" 
+            app:tint="?attr/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/CircleImageView"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_contact_name"
+            android:id="@+id/tv_reminder_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="?attr/colorOnSurface"
-            app:layout_constraintBottom_toTopOf="@+id/tv_contact_number"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_contact_photo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="Contact Name" />
+            app:layout_constraintStart_toEndOf="@id/iv_reminder_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_reminder_icon"
+            tools:text="Call David" />
 
         <TextView
-            android:id="@+id/tv_contact_number"
+            android:id="@+id/tv_reminder_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="?attr/colorOnSurfaceVariant"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_contact_name"
-            app:layout_constraintStart_toStartOf="@id/tv_contact_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_contact_name"
-            tools:text="+1234567890" />
+            app:layout_constraintEnd_toEndOf="@id/tv_reminder_title"
+            app:layout_constraintStart_toStartOf="@id/tv_reminder_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_reminder_title"
+            tools:text="Today at 5:00 PM" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

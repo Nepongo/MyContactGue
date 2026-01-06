@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Modern Color Palette -->
+    <color name="modern_blue">#FF3D5AFE</color> <!-- A vibrant blue for accents -->
+    <color name="off_white">#FFF8F9FA</color>   <!-- A soft white for backgrounds -->
+    <color name="dark_gray">#FF212121</color>   <!-- For primary text -->
+    <color name="light_gray">#FF757575</color>  <!-- For secondary text -->
+
 </resources>

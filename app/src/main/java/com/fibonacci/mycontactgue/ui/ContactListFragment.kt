@@ -36,7 +36,6 @@ class ContactListFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         
-        // Initialize adapter with an empty list
         contactAdapter = ContactAdapter(emptyList())
 
         binding.rvContacts.apply {
@@ -44,9 +43,8 @@ class ContactListFragment : Fragment() {
             adapter = contactAdapter
         }
 
-        // THIS IS THE KEY: Observe changes from the database
+        // The one and only observer
         contactViewModel.allContacts.observe(viewLifecycleOwner) { contacts ->
-            // When data changes, update the adapter
             contacts?.let { 
                 contactAdapter.updateList(it)
             }
@@ -65,16 +63,8 @@ class ContactListFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty()) {
-                    contactViewModel.allContacts.observe(viewLifecycleOwner) { contacts ->
-                        contactAdapter.updateList(contacts)
-                    }
-                } else {
-                    contactViewModel.searchContacts(newText)
-                    contactViewModel.searchResults.observe(viewLifecycleOwner) { results ->
-                        contactAdapter.updateList(results)
-                    }
-                }
+                // Just tell the ViewModel the new query
+                contactViewModel.setSearchQuery(newText.orEmpty())
                 return true
             }
         })
