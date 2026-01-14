@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:backgroundTint="?android:attr/windowBackground"
         app:fabAlignmentMode="center"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="20dp"
@@ -31,6 +32,8 @@
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
             app:elevation="0dp"
+            app:itemIconTint="?attr/colorPrimary"
+            app:itemTextColor="?attr/colorOnSurface"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_nav_menu" />
 
@@ -41,9 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Create New Contact"
-        app:backgroundTint="@color/modern_blue"
+        app:backgroundTint="?attr/colorPrimary"
         app:layout_anchor="@id/bottom_app_bar"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:tint="@color/white" />
+        app:tint="?attr/colorOnPrimary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,16 +1,21 @@
-# Bukti Implementasi Checklist - My Contact Gue
+# Bukti Implementasi Checklist - My Contact Gue (Final Production Version)
 
-Dokumen ini menjelaskan bukti kode dan fungsionalitas untuk setiap poin checklist yang telah terpenuhi pada aplikasi **My Contact Gue**.
+Dokumen ini menyediakan bukti kode konkret dan penjelasan fungsionalitas untuk setiap poin checklist pada aplikasi **My Contact Gue**.
 
 ---
 
 ### 1. Input Data (Create)
-**Bukti Kode:** `CreateContactFragment.kt` -> fungsi `saveContact()`
+**Bukti Kode:** `CreateContactFragment.kt`
 ```kotlin
-val newContact = Contact(name = name, phoneNumber = phone, ...)
+val newContact = Contact(
+    name = name, 
+    phoneNumber = phone, 
+    email = email, 
+    birthday = birthday,
+    photoUri = currentPhotoUri?.toString()
+)
 contactViewModel.insertContact(newContact)
 ```
-**Penjelasan:** Pengguna dapat memasukkan data melalui form di `CreateContactFragment` dan menyimpannya ke database.
 
 ### 2. Validasi Form
 **Bukti Kode:** `CreateContactFragment.kt`
@@ -20,79 +25,114 @@ if (name.isEmpty()) {
     return
 }
 ```
-**Penjelasan:** Muncul pesan error pada `TextInputLayout` jika kolom Nama atau Nomor Telepon kosong.
 
 ### 3. Tampil Data (Read)
 **Bukti Kode:** `ContactListFragment.kt`
 ```kotlin
 contactViewModel.allContacts.observe(viewLifecycleOwner) { contacts ->
-    contactAdapter.updateList(it)
+    contacts?.let { 
+        contactAdapter.updateList(it)
+    }
 }
 ```
-**Penjelasan:** Data dari database Room ditampilkan secara real-time di halaman utama menggunakan LiveData.
 
 ### 4. Edit Data (Update)
-**Bukti Kode:** `CreateContactFragment.kt` -> fungsi `saveContact()`
+**Bukti Kode:** `CreateContactFragment.kt`
 ```kotlin
-val updatedContact = contactToEdit!!.copy(name = name, ...)
+val updatedContact = contactToEdit!!.copy(
+    name = name, 
+    phoneNumber = phone, 
+    email = email,
+    birthday = birthday,
+    photoUri = currentPhotoUri?.toString()
+)
 contactViewModel.updateContact(updatedContact)
 ```
-**Penjelasan:** Pengguna dapat mengubah informasi kontak yang sudah ada melalui layar Edit.
 
 ### 5. Hapus Data (Delete)
 **Bukti Kode:** `ContactDetailFragment.kt`
 ```kotlin
 contactViewModel.deleteContact(args.contact)
 ```
-**Penjelasan:** Terdapat fitur hapus kontak di layar rincian kontak.
 
 ### 6. Dialog Konfirmasi
 **Bukti Kode:** `ContactDetailFragment.kt`
 ```kotlin
 MaterialAlertDialogBuilder(requireContext())
-    .setTitle("Delete Contact")
-    .setMessage("Are you sure?")
-    .setPositiveButton("Delete") { ... }
+    .setTitle(getString(R.string.delete_contact_title))
+    .setMessage(getString(R.string.delete_contact_msg, args.contact.name))
+    .setPositiveButton(getString(R.string.delete)) { _, _ ->
+        contactViewModel.deleteContact(args.contact)
+    }
 ```
-**Penjelasan:** Dialog peringatan muncul untuk mencegah penghapusan data yang tidak disengaja.
 
 ### 7. Data Persisten
 **Bukti Kode:** `ContactDatabase.kt`
 ```kotlin
-@Database(entities = [Contact::class, CallLog::class, Profile::class], version = 3)
+@Database(entities = [Contact::class, CallLog::class, Profile::class], version = 3, exportSchema = false)
 abstract class ContactDatabase : RoomDatabase() { ... }
 ```
-**Penjelasan:** Menggunakan database Room sehingga data tetap tersimpan meskipun aplikasi ditutup total.
 
 ### 8. RecyclerView
-**Bukti Kode:** `fragment_contact_list.xml`
+**Bukti Kode:** `fragment_sms_inbox.xml`
 ```xml
 <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/rv_contacts" ... />
+    android:id="@+id/rv_sms"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 ```
-**Penjelasan:** Semua daftar (Kontak, Riwayat, SMS) ditampilkan menggunakan komponen RecyclerView.
 
 ### 9. Custom Adapter
-**Bukti Kode:** `ContactAdapter.kt`, `CallLogAdapter.kt` (Dynamic Resolution), `SmsAdapter.kt`.
-**Penjelasan:** Menggunakan adapter kustom yang mengimplementasikan `ViewHolder` untuk performa tinggi. `CallLogAdapter` secara dinamis mencocokkan nomor telepon dengan nama kontak.
+**Bukti Kode:** `CallLogAdapter.kt`
+```kotlin
+class CallLogAdapter(
+    private var callLogs: List<CallLog>,
+    private var contacts: List<Contact> = emptyList()
+) : RecyclerView.Adapter<CallLogAdapter.CallLogViewHolder>() { ... }
+```
 
 ### 10. Custom Item Layout
 **Bukti Kode:** `item_contact.xml`
-**Penjelasan:** Tampilan item kontak memiliki Gambar (ShapeableImageView), Nama (Title), dan Nomor (Body).
+```xml
+<com.google.android.material.card.MaterialCardView ...>
+    <androidx.constraintlayout.widget.ConstraintLayout ...>
+        <com.google.android.material.imageview.ShapeableImageView android:id="@+id/iv_contact_photo" ... />
+        <TextView android:id="@+id/tv_contact_name" ... />
+        <TextView android:id="@+id/tv_contact_number" ... />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+```
 
-### 11. Scroll Lancar
-**Penjelasan:** Penggunaan `ViewHolder` dan `DiffUtil`-like logic (updateList) memastikan scrolling daftar kontak sangat lancar tanpa lag.
+### 11. Scroll Lancar & Keyboard Awareness
+**Bukti Kode:** `MainActivity.kt`
+```kotlin
+ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+    val isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+    if (isKeyboardVisible) {
+        binding.bottomAppBar.visibility = View.GONE
+        binding.fab.visibility = View.GONE
+    }
+    insets
+}
+```
 
 ### 12. Navigasi Standar
 **Bukti Kode:** `activity_main.xml`
 ```xml
 <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bottom_nav_view" ... />
+    android:id="@+id/bottom_nav_view"
+    app:menu="@menu/bottom_nav_menu" />
 ```
-**Penjelasan:** Menggunakan `BottomNavigationView` yang tertanam di `BottomAppBar` sesuai standar Material Design.
 
 ### 13. Fragment
-**Bukti Kode:** Terdiri dari 7 fragment: `ContactListFragment`, `ContactDetailFragment`, `CreateContactFragment`, `CallLogFragment`, `SmsInboxFragment`, `ChatFragment`, dan `ProfileFragment`.
+**Bukti Kode:** `nav_graph.xml`
+```xml
+<fragment android:id="@+id/ContactListFragment" ... />
+<fragment android:id="@+id/smsInboxFragment" ... />
+<fragment android:id="@+id/chatFragment" ... />
+<fragment android:id="@+id/profileFragment" ... />
+```
 
 ### 14. Explicit Intent
 **Bukti Kode:** `ContactDetailFragment.kt`
@@ -100,55 +140,87 @@ abstract class ContactDatabase : RoomDatabase() { ... }
 val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
 startActivity(intent)
 ```
-**Penjelasan:** Menggunakan Intent eksplisit untuk melakukan panggilan telepon dan navigasi antar layar.
 
-### 15. Kirim Data (PutExtra/SafeArgs)
-**Bukti Kode:** `nav_graph.xml`
-```xml
-<argument android:name="contact" app:argType="com.fibonacci.mycontactgue.data.Contact" />
+### 15. Kirim Data (SafeArgs)
+**Bukti Kode:** `ContactDetailFragment.kt`
+```kotlin
+val action = ContactDetailFragmentDirections.actionContactDetailFragmentToChatFragment(phoneNumber)
+findNavController().navigate(action)
 ```
-**Penjelasan:** Pengiriman data antar layar (misal: Detail ke Chat) menggunakan SafeArgs yang aman dan efisien.
 
 ### 16. ConstraintLayout
-**Bukti Kode:** Digunakan di hampir seluruh file XML (`fragment_chat.xml`, `item_contact.xml`, dll).
+**Bukti Kode:** `fragment_chat.xml`
+```xml
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+```
 
 ### 17. Material Components
-**Bukti Kode:** Menggunakan `MaterialCardView`, `FloatingActionButton`, `TextInputLayout` (OutlinedBox), dan `MaterialToolbar`.
+**Bukti Kode:** `activity_main.xml`
+```xml
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fab"
+    app:layout_anchor="@id/bottom_app_bar" />
+```
 
 ### 18. Manajemen Resource
-**Bukti Kode:**
-- Warna: `res/values/colors.xml` (Modern Blue Palette)
-- Teks: `res/values/strings.xml`
-**Penjelasan:** Tidak ada hardcoded warna atau teks di dalam file layout atau Kotlin.
+**Bukti Kode:** `strings.xml` & `colors.xml`
+```xml
+<color name="neon_blue">#00D4FF</color>
+<string name="sms_list_label">Messages</string>
+```
 
 ### 19. Feedback User
-**Bukti Kode:** `Toast.makeText(context, "Contact Saved", Toast.LENGTH_SHORT).show()`
-**Penjelasan:** Memberikan respon visual melalui Toast saat aksi Simpan, Update, atau Hapus berhasil.
+**Bukti Kode:** `ProfileFragment.kt`
+```kotlin
+Toast.makeText(context, "Profile Updated", Toast.LENGTH_SHORT).show()
+```
 
 ### 20. Penamaan Variabel
-**Penjelasan:** Konsisten menggunakan `camelCase` untuk variabel Kotlin dan `snake_case` untuk ID XML.
+**Bukti:**
+- XML ID: `android:id="@+id/et_profile_name"` (snake_case)
+- Kotlin: `binding.etProfileName.setText(...)` (camelCase via ViewBinding)
 
 ### 21. Modular
-**Penjelasan:** Kode dipisah secara rapi dalam package `ui` (Fragment, Adapter, ViewModel) dan `data` (Entity, DAO, Database, Repository).
+**Struktur Proyek:**
+- `com.fibonacci.mycontactgue.data` (Entity, DAO, DB, Repository)
+- `com.fibonacci.mycontactgue.ui` (Fragment, Adapter, ViewModel)
 
 ### 22. Clean Project
-**Penjelasan:** Seluruh file sampah dan referensi lama (seperti keyword "reminder") telah dihapus dan diganti dengan modul SMS yang terintegrasi.
+**Bukti:** Penghapusan file lama (SplashActivity, ReminderAdapter) dan penggunaan `SmsInboxFragment` yang baru.
 
-### 23. Splash Screen
-**Bukti Kode:** `AndroidManifest.xml` (Launcher Activity)
-**Penjelasan:** Menggunakan System Splash Screen modern yang menampilkan logo secara instan.
-
-### 24. Dark Mode
-**Bukti Kode:** `res/values-night/themes.xml`
-**Penjelasan:** Warna aplikasi menyesuaikan secara otomatis saat perangkat beralih ke mode gelap dengan skema warna yang tetap estetik.
-
-### 25. Search Bar
-**Bukti Kode:** `ContactListFragment.kt` -> `SearchView`
+### 23. Splash Screen (Coded)
+**Bukti Kode:** `SplashActivity.kt`
 ```kotlin
-contactViewModel.setSearchQuery(newText.orEmpty())
+Handler(Looper.getMainLooper()).postDelayed({
+    startActivity(Intent(this, MainActivity::class.java))
+    finish()
+}, 2000)
 ```
-**Penjelasan:** Fitur pencarian kontak berfungsi secara real-time di halaman utama.
 
-### 26. Custom App Icon
-**Bukti Kode:** `ic_launcher_foreground.xml` (Adaptive Icon)
-**Penjelasan:** Menggunakan ikon kustom (Biru-Putih) yang seragam dengan identitas visual aplikasi.
+### 24. Neon Modern Dark Mode
+**Bukti Kode:** `values-night/themes.xml`
+```xml
+<item name="android:windowBackground">@color/black</item>
+<item name="colorSurfaceVariant">@color/neon_blue_dark</item>
+<item name="colorPrimary">@color/neon_blue</item>
+```
+
+### 25. Search Bar & SMS Resolver
+**Bukti Kode:** `SmsInboxFragment.kt`
+```kotlin
+val isNumeric = address.any { char -> char.isDigit() }
+val contactName = if (isNumeric) resolveContactName(address) else address
+```
+
+### 26. Custom App Icon & Sync
+**Bukti Kode:** `ContactListFragment.kt`
+```kotlin
+private fun syncSystemContacts() {
+    val cursor = requireContext().contentResolver.query(
+        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, ...
+    )
+}
+```

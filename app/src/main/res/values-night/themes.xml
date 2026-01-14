@@ -1,25 +1,44 @@
 <!-- res/values-night/themes.xml -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Neon Modern Dark Theme - Pure Black & Neon Blue -->
     <style name="Theme.MyContactGue" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/modern_blue</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/modern_blue_dark</item>
-        <item name="colorOnPrimaryContainer">@color/white</item>
+        <!-- Strictly Neon Blue for interactive elements -->
+        <item name="colorPrimary">@color/neon_blue</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryContainer">@color/neon_blue</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
         
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/modern_blue_light</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/neon_blue</item>
+        <item name="colorOnSecondary">@color/black</item>
         
-        <!-- Background and surface colors -->
-        <item name="android:windowBackground">@color/dark_gray</item>
-        <item name="colorSurface">@color/dark_gray</item>
+        <!-- Pure Black Backgrounds -->
+        <item name="android:windowBackground">@color/black</item>
+        <item name="colorSurface">@color/black</item>
         <item name="colorOnSurface">@color/white</item>
-        <item name="colorOutline">@color/light_gray</item>
+        
+        <!-- Neon Blue for Containers (Cards) -->
+        <item name="colorSurfaceVariant">@color/neon_blue_dark</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+        
+        <!-- White Lines/Outlines -->
+        <item name="colorOutline">@color/white</item>
+        <item name="colorOutlineVariant">@color/white</item>
 
         <!-- Status bar and Navigation bar -->
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:navigationBarColor">@color/black</item>
+        
+        <!-- Strictly White Typography -->
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:editTextColor">@color/white</item>
+        
+        <!-- UI Controls -->
+        <item name="colorAccent">@color/neon_blue</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/neon_blue</item>
+        <item name="colorControlHighlight">@color/neon_blue_glow</item>
     </style>
 </resources>

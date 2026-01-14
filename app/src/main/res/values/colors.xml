@@ -3,24 +3,24 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Modern Color Palette - Strictly Blue & Gray -->
+    <!-- Modern Color Palette (Light Mode) -->
     <color name="modern_blue">#FF3D5AFE</color>
     <color name="modern_blue_light">#7986CB</color>
     <color name="modern_blue_dark">#1A237E</color>
-    
     <color name="soft_blue_bg">#F0F4FF</color>
     <color name="off_white">#FFF8F9FA</color>
     <color name="dark_gray">#FF212121</color>
     <color name="light_gray">#FF757575</color>
     <color name="color_outline">#FFBDBDBD</color>
     
-    <color name="accent_blue_transparent">#1A3D5AFE</color>
+    <!-- Neon Dark Mode Colors -->
+    <color name="neon_blue">#00D4FF</color>
+    <color name="neon_blue_dark">#002B36</color>
+    <color name="neon_blue_glow">#3300D4FF</color>
     <color name="glass_white">#B3FFFFFF</color>
 
-    <!-- Override for any remaining default purples -->
+    <!-- System Overrides to Eliminate Default Purple -->
     <color name="purple_200">#FF3D5AFE</color>
     <color name="purple_500">#FF3D5AFE</color>
     <color name="purple_700">#1A237E</color>
-    <color name="teal_200">#FF7986CB</color>
-    <color name="teal_700">#FF1A237E</color>
 </resources>

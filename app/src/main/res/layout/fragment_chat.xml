@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/off_white">
+    android:background="?android:attr/windowBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/off_white"
+        android:background="?android:attr/windowBackground"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIconTint="@color/dark_gray">
+            app:navigationIconTint="?attr/colorOnSurface">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
-                    android:textColor="@color/dark_gray"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold"
                     tools:text="Dudur Fauzan" />
 
@@ -38,7 +38,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceLabelSmall"
-                    android:textColor="@color/light_gray"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
                     tools:text="+62 812 3456 7890" />
             </LinearLayout>
 
@@ -74,6 +75,7 @@
             app:cardCornerRadius="28dp"
             app:cardElevation="8dp"
             app:strokeWidth="0dp"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -103,7 +105,9 @@
                         android:background="@android:color/transparent"
                         android:inputType="textLongMessage|textAutoCorrect"
                         android:padding="12dp"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
@@ -114,7 +118,8 @@
                     android:layout_marginStart="4dp"
                     app:icon="@android:drawable/ic_menu_send"
                     app:cornerRadius="24dp"
-                    app:backgroundTint="@color/modern_blue" />
+                    app:backgroundTint="?attr/colorPrimary"
+                    app:iconTint="?attr/colorOnPrimary" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

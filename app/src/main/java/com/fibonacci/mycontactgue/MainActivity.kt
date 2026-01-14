@@ -3,6 +3,8 @@ package com.fibonacci.mycontactgue
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -31,27 +33,49 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Fix for Bottom Navigation obscuring text when keyboard is shown
+        setupKeyboardListener()
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.ContactListFragment,
-                R.id.callLogFragment,
-                R.id.smsInboxFragment,
-                R.id.profileFragment,
-                R.id.chatFragment,
-                R.id.CreateContactFragment -> {
-                    binding.bottomAppBar.visibility = View.VISIBLE
-                    binding.fab.visibility = View.VISIBLE
-                    
-                    // Sync tab selection
-                    when (destination.id) {
-                        R.id.chatFragment -> binding.bottomNavView.menu.findItem(R.id.smsInboxFragment).isChecked = true
-                        R.id.CreateContactFragment -> binding.bottomNavView.menu.findItem(R.id.ContactListFragment).isChecked = true
-                    }
+            updateBottomNavigationVisibility(destination.id)
+        }
+    }
+
+    private fun setupKeyboardListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+            
+            if (isKeyboardVisible) {
+                binding.bottomAppBar.visibility = View.GONE
+                binding.fab.visibility = View.GONE
+            } else {
+                navController.currentDestination?.let { 
+                    updateBottomNavigationVisibility(it.id)
                 }
-                else -> {
-                    binding.bottomAppBar.visibility = View.GONE
-                    binding.fab.visibility = View.GONE
+            }
+            insets
+        }
+    }
+
+    private fun updateBottomNavigationVisibility(destinationId: Int) {
+        when (destinationId) {
+            R.id.ContactListFragment,
+            R.id.callLogFragment,
+            R.id.smsInboxFragment,
+            R.id.profileFragment,
+            R.id.chatFragment,
+            R.id.CreateContactFragment -> {
+                binding.bottomAppBar.visibility = View.VISIBLE
+                binding.fab.visibility = View.VISIBLE
+                
+                when (destinationId) {
+                    R.id.chatFragment -> binding.bottomNavView.menu.findItem(R.id.smsInboxFragment).isChecked = true
+                    R.id.CreateContactFragment -> binding.bottomNavView.menu.findItem(R.id.ContactListFragment).isChecked = true
                 }
+            }
+            else -> {
+                binding.bottomAppBar.visibility = View.GONE
+                binding.fab.visibility = View.GONE
             }
         }
     }

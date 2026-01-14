@@ -49,7 +49,6 @@ class ChatFragment : Fragment() {
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         binding.toolbar.setupWithNavController(findNavController())
         
-        // Custom Toolbar Layout setup
         binding.tvChatNumber.text = args.phoneNumber
         resolveAndDisplayName()
 
@@ -63,9 +62,16 @@ class ChatFragment : Fragment() {
     private fun resolveAndDisplayName() {
         contactViewModel.allContacts.observe(viewLifecycleOwner) { contacts ->
             val normalizedInput = args.phoneNumber.replace("[^0-9]".toRegex(), "")
+            
+            // Fixed logic: Don't resolve if input is non-numeric or normalization yields empty string
+            if (normalizedInput.isEmpty() || !args.phoneNumber.any { it.isDigit() }) {
+                binding.tvChatName.text = args.phoneNumber
+                return@observe
+            }
+
             val contact = contacts.find {
                 val normalizedContact = it.phoneNumber.replace("[^0-9]".toRegex(), "")
-                normalizedContact.endsWith(normalizedInput) || normalizedInput.endsWith(normalizedContact)
+                normalizedContact.isNotEmpty() && (normalizedContact.endsWith(normalizedInput) || normalizedInput.endsWith(normalizedContact))
             }
             binding.tvChatName.text = contact?.name ?: args.phoneNumber
         }

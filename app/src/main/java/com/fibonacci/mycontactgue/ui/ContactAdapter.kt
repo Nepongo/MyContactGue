@@ -37,9 +37,14 @@ class ContactAdapter(private var contactList: List<Contact>) : RecyclerView.Adap
             binding.tvContactName.text = contact.name
             binding.tvContactNumber.text = contact.phoneNumber
             
-            contact.photoUri?.let {
-                binding.ivContactPhoto.setImageURI(it.toUri())
-            } ?: binding.ivContactPhoto.setImageResource(R.drawable.ic_default_person)
+            try {
+                contact.photoUri?.let {
+                    binding.ivContactPhoto.setImageURI(it.toUri())
+                } ?: binding.ivContactPhoto.setImageResource(R.drawable.ic_default_person)
+            } catch (e: SecurityException) {
+                // If permission is lost, fallback to default icon instead of crashing
+                binding.ivContactPhoto.setImageResource(R.drawable.ic_default_person)
+            }
         }
     }
 }

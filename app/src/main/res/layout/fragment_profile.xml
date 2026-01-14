@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/off_white">
+    android:background="?android:attr/windowBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/off_white"
+        android:background="?android:attr/windowBackground"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="My Profile"
-            app:titleCentered="true" />
+            app:titleCentered="true"
+            app:titleTextColor="?attr/colorOnSurface" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,7 +44,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/modern_blue"
+                app:strokeColor="?attr/colorPrimary"
                 app:strokeWidth="2dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -67,6 +68,7 @@
                 app:cardCornerRadius="24dp"
                 app:cardElevation="2dp"
                 app:strokeWidth="0dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_profile_photo"
@@ -85,7 +87,7 @@
                         android:textAlignment="center"
                         android:textAppearance="?attr/textAppearanceHeadlineSmall"
                         android:textStyle="bold"
-                        android:textColor="@color/dark_gray"
+                        android:textColor="?attr/colorOnSurface"
                         tools:text="Dudur Fauzan" />
 
                     <View
@@ -101,9 +103,9 @@
                         android:layout_height="wrap_content"
                         android:drawablePadding="12dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/light_gray"
+                        android:textColor="?attr/colorOnSurface"
                         app:drawableStartCompat="@android:drawable/ic_menu_call"
-                        app:drawableTint="@color/modern_blue"
+                        app:drawableTint="?attr/colorPrimary"
                         tools:text="+62 812 3456 7890" />
 
                     <TextView
@@ -113,9 +115,9 @@
                         android:layout_marginTop="16dp"
                         android:drawablePadding="12dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/light_gray"
+                        android:textColor="?attr/colorOnSurface"
                         app:drawableStartCompat="@android:drawable/ic_dialog_email"
-                        app:drawableTint="@color/modern_blue"
+                        app:drawableTint="?attr/colorPrimary"
                         tools:text="dudur@fauzan.com" />
 
                     <TextView
@@ -125,9 +127,9 @@
                         android:layout_marginTop="16dp"
                         android:drawablePadding="12dp"
                         android:gravity="center_vertical"
-                        android:textColor="@color/light_gray"
+                        android:textColor="?attr/colorOnSurface"
                         app:drawableStartCompat="@android:drawable/ic_menu_my_calendar"
-                        app:drawableTint="@color/modern_blue"
+                        app:drawableTint="?attr/colorPrimary"
                         tools:text="01/01/1990" />
 
                     <com.google.android.material.button.MaterialButton
@@ -137,8 +139,8 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="32dp"
                         android:text="Edit Profile"
-                        android:textColor="@color/modern_blue"
-                        app:strokeColor="@color/modern_blue"
+                        android:textColor="?attr/colorPrimary"
+                        app:strokeColor="?attr/colorPrimary"
                         app:cornerRadius="16dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -155,6 +157,7 @@
                 app:cardCornerRadius="24dp"
                 app:cardElevation="2dp"
                 app:strokeWidth="0dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_profile_photo"
@@ -181,7 +184,8 @@
                             android:id="@+id/et_profile_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName" />
+                            android:inputType="textPersonName"
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -200,7 +204,8 @@
                             android:id="@+id/et_profile_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone" />
+                            android:inputType="phone"
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -219,7 +224,8 @@
                             android:id="@+id/et_profile_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress" />
+                            android:inputType="textEmailAddress"
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -239,7 +245,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
-                            android:clickable="true" />
+                            android:clickable="true"
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -249,7 +256,8 @@
                         android:layout_marginTop="32dp"
                         android:text="Save Profile"
                         app:cornerRadius="16dp"
-                        app:backgroundTint="@color/modern_blue" />
+                        android:textColor="?attr/colorOnPrimary"
+                        app:backgroundTint="?attr/colorPrimary" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

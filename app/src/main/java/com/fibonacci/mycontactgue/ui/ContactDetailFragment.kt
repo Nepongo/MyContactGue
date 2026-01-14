@@ -65,9 +65,13 @@ class ContactDetailFragment : Fragment() {
         binding.tvDetailPhone.text = contact.phoneNumber
         binding.tvDetailEmail.text = contact.email
 
-        contact.photoUri?.let {
-            binding.ivDetailPhoto.setImageURI(it.toUri())
-        } ?: binding.ivDetailPhoto.setImageResource(R.drawable.ic_default_person)
+        try {
+            contact.photoUri?.let {
+                binding.ivDetailPhoto.setImageURI(it.toUri())
+            } ?: binding.ivDetailPhoto.setImageResource(R.drawable.ic_default_person)
+        } catch (e: SecurityException) {
+            binding.ivDetailPhoto.setImageResource(R.drawable.ic_default_person)
+        }
 
         binding.btnCall.setOnClickListener { checkCallPermission() }
         binding.btnMessage.setOnClickListener { navigateToChat() }
@@ -110,7 +114,6 @@ class ContactDetailFragment : Fragment() {
     private fun navigateToChat() {
         val phoneNumber = args.contact.phoneNumber
         if (phoneNumber.isNotBlank()) {
-            // Fix: Directly navigate to ChatFragment using SafeArgs
             val action = ContactDetailFragmentDirections.actionContactDetailFragmentToChatFragment(phoneNumber)
             findNavController().navigate(action)
         } else {
