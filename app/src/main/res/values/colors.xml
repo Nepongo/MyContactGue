@@ -3,10 +3,24 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Modern Color Palette -->
-    <color name="modern_blue">#FF3D5AFE</color> <!-- A vibrant blue for accents -->
-    <color name="off_white">#FFF8F9FA</color>   <!-- A soft white for backgrounds -->
-    <color name="dark_gray">#FF212121</color>   <!-- For primary text -->
-    <color name="light_gray">#FF757575</color>  <!-- For secondary text -->
+    <!-- Modern Color Palette - Strictly Blue & Gray -->
+    <color name="modern_blue">#FF3D5AFE</color>
+    <color name="modern_blue_light">#7986CB</color>
+    <color name="modern_blue_dark">#1A237E</color>
+    
+    <color name="soft_blue_bg">#F0F4FF</color>
+    <color name="off_white">#FFF8F9FA</color>
+    <color name="dark_gray">#FF212121</color>
+    <color name="light_gray">#FF757575</color>
+    <color name="color_outline">#FFBDBDBD</color>
+    
+    <color name="accent_blue_transparent">#1A3D5AFE</color>
+    <color name="glass_white">#B3FFFFFF</color>
 
+    <!-- Override for any remaining default purples -->
+    <color name="purple_200">#FF3D5AFE</color>
+    <color name="purple_500">#FF3D5AFE</color>
+    <color name="purple_700">#1A237E</color>
+    <color name="teal_200">#FF7986CB</color>
+    <color name="teal_700">#FF1A237E</color>
 </resources>

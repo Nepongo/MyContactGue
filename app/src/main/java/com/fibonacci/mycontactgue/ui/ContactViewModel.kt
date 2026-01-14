@@ -6,15 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import com.fibonacci.mycontactgue.data.CallLog
 import com.fibonacci.mycontactgue.data.Contact
 import com.fibonacci.mycontactgue.data.ContactRepository
+import com.fibonacci.mycontactgue.data.Profile
 import kotlinx.coroutines.launch
 
 class ContactViewModel(private val repository: ContactRepository) : ViewModel() {
 
+    // Contact Logic
     private val _searchQuery = MutableLiveData<String>("")
 
-    // Use switchMap to react to changes in the search query.
     val allContacts: LiveData<List<Contact>> = _searchQuery.switchMap { query ->
         if (query.isNullOrEmpty()) {
             repository.allContacts
@@ -28,15 +30,29 @@ class ContactViewModel(private val repository: ContactRepository) : ViewModel() 
     }
 
     fun insertContact(contact: Contact) = viewModelScope.launch {
-        repository.insert(contact)
+        repository.insertContact(contact)
     }
 
     fun updateContact(contact: Contact) = viewModelScope.launch {
-        repository.update(contact)
+        repository.updateContact(contact)
     }
 
     fun deleteContact(contact: Contact) = viewModelScope.launch {
-        repository.delete(contact)
+        repository.deleteContact(contact)
+    }
+
+    // Call Log Logic
+    val allCallLogs: LiveData<List<CallLog>> = repository.allCallLogs
+
+    fun addCallLog(callLog: CallLog) = viewModelScope.launch {
+        repository.insertCallLog(callLog)
+    }
+
+    // Profile Logic
+    val profile: LiveData<Profile?> = repository.profile
+
+    fun saveProfile(profile: Profile) = viewModelScope.launch {
+        repository.insertProfile(profile)
     }
 }
 

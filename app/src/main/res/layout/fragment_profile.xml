@@ -5,11 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/off_white"
-    tools:context=".ui.CreateContactFragment">
+    android:background="@color/off_white">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/off_white"
@@ -19,6 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="My Profile"
             app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -35,7 +34,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_photo_container"
+                android:id="@+id/cv_profile_photo"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="16dp"
@@ -47,56 +46,119 @@
                 app:strokeColor="@color/modern_blue"
                 app:strokeWidth="2dp">
 
-                <FrameLayout
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_profile_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/iv_new_contact_photo"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_default_person"
-                        app:shapeAppearance="@style/CircleImageView" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#33000000" />
-
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_camera"
-                        app:tint="@color/white" />
-                </FrameLayout>
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_default_person"
+                    app:shapeAppearance="@style/CircleImageView" />
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tv_add_photo_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Change Photo"
-                android:textAppearance="?attr/textAppearanceLabelLarge"
-                android:textColor="@color/modern_blue"
-                app:layout_constraintEnd_toEndOf="@+id/cv_photo_container"
-                app:layout_constraintStart_toStartOf="@+id/cv_photo_container"
-                app:layout_constraintTop_toBottomOf="@+id/cv_photo_container" />
-
+            <!-- Display View -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_display"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="20dp"
+                android:visibility="gone"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="2dp"
                 app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_add_photo_label">
+                app:layout_constraintTop_toBottomOf="@+id/cv_profile_photo"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:id="@+id/tv_profile_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_gray"
+                        tools:text="Dudur Fauzan" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="?attr/colorOutlineVariant" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="12dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/light_gray"
+                        app:drawableStartCompat="@android:drawable/ic_menu_call"
+                        app:drawableTint="@color/modern_blue"
+                        tools:text="+62 812 3456 7890" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:drawablePadding="12dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/light_gray"
+                        app:drawableStartCompat="@android:drawable/ic_dialog_email"
+                        app:drawableTint="@color/modern_blue"
+                        tools:text="dudur@fauzan.com" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_birthday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:drawablePadding="12dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/light_gray"
+                        app:drawableStartCompat="@android:drawable/ic_menu_my_calendar"
+                        app:drawableTint="@color/modern_blue"
+                        tools:text="01/01/1990" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_edit_profile"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="32dp"
+                        android:text="Edit Profile"
+                        android:textColor="@color/modern_blue"
+                        app:strokeColor="@color/modern_blue"
+                        app:cornerRadius="16dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Edit/Form View -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_form"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="20dp"
+                android:visibility="visible"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_profile_photo"
+                tools:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,75 +167,75 @@
                     android:padding="24dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_name"
+                        android:id="@+id/til_profile_name"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_name"
+                        android:hint="Your Name"
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusTopEnd="16dp"
                         app:boxCornerRadiusTopStart="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_name"
+                            android:id="@+id/et_profile_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_phone"
+                        android:id="@+id/til_profile_phone"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:hint="@string/hint_phone"
+                        android:hint="Your Phone"
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusTopEnd="16dp"
                         app:boxCornerRadiusTopStart="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_phone"
+                            android:id="@+id/et_profile_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="phone" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_email"
+                        android:id="@+id/til_profile_email"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:hint="@string/hint_email"
+                        android:hint="Your Email"
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusTopEnd="16dp"
                         app:boxCornerRadiusTopStart="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_email"
+                            android:id="@+id/et_profile_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_birthday"
+                        android:id="@+id/til_profile_birthday"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:hint="@string/hint_birthday"
+                        android:hint="Your Birthday"
                         app:boxCornerRadiusBottomEnd="16dp"
                         app:boxCornerRadiusBottomStart="16dp"
                         app:boxCornerRadiusTopEnd="16dp"
                         app:boxCornerRadiusTopStart="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_birthday"
+                            android:id="@+id/et_profile_birthday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
@@ -181,11 +243,11 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_save"
+                        android:id="@+id/btn_save_profile"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:layout_marginTop="32dp"
-                        android:text="@string/btn_save"
+                        android:text="Save Profile"
                         app:cornerRadius="16dp"
                         app:backgroundTint="@color/modern_blue" />
 

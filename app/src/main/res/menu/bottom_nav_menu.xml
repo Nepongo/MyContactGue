@@ -3,17 +3,28 @@
 
     <item
         android:id="@+id/ContactListFragment"
-        android:icon="@android:drawable/ic_menu_myplaces"
+        android:icon="@drawable/ic_contacts_modern"
         android:title="Contacts" />
 
     <item
         android:id="@+id/callLogFragment"
-        android:icon="@android:drawable/ic_menu_call"
-        android:title="Calls" />
+        android:icon="@drawable/ic_call_modern"
+        android:title="History" />
+
+    <!-- This placeholder provides space for the FAB -->
+    <item
+        android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false" />
 
     <item
-        android:id="@+id/remindersFragment"
-        android:icon="@android:drawable/ic_menu_my_calendar"
-        android:title="Reminders" />
+        android:id="@+id/smsInboxFragment"
+        android:icon="@drawable/ic_message_modern"
+        android:title="Messages" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile_modern"
+        android:title="Profile" />
 
 </menu>

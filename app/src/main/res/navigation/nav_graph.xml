@@ -25,10 +25,20 @@
         tools:layout="@layout/fragment_call_log" />
 
     <fragment
-        android:id="@+id/remindersFragment"
-        android:name="com.fibonacci.mycontactgue.ui.RemindersFragment"
-        android:label="@string/reminders_label"
-        tools:layout="@layout/fragment_reminders" />
+        android:id="@+id/smsInboxFragment"
+        android:name="com.fibonacci.mycontactgue.ui.SmsInboxFragment"
+        android:label="@string/sms_list_label"
+        tools:layout="@layout/fragment_sms_inbox">
+        <action
+            android:id="@+id/action_smsInboxFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.fibonacci.mycontactgue.ui.ProfileFragment"
+        android:label="My Profile"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/ContactDetailFragment"
@@ -41,6 +51,9 @@
         <action
             android:id="@+id/action_ContactDetailFragment_to_CreateContactFragment"
             app:destination="@id/CreateContactFragment" />
+        <action
+            android:id="@+id/action_ContactDetailFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
 
     <fragment
@@ -53,6 +66,16 @@
             app:argType="com.fibonacci.mycontactgue.data.Contact"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.fibonacci.mycontactgue.ui.ChatFragment"
+        android:label=""
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
     </fragment>
 
 </navigation>

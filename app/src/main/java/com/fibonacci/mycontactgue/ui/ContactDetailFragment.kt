@@ -18,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.fibonacci.mycontactgue.ContactsApplication
 import com.fibonacci.mycontactgue.R
+import com.fibonacci.mycontactgue.data.CallLog
 import com.fibonacci.mycontactgue.databinding.FragmentContactDetailBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -36,10 +37,9 @@ class ContactDetailFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            // Permission is granted. Continue the action
             initiateCall()
         } else {
-            Toast.makeText(requireContext(), "Call permission denied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -60,17 +60,18 @@ class ContactDetailFragment : Fragment() {
         binding.toolbar.setupWithNavController(findNavController())
 
         val contact = args.contact
-        binding.toolbar.title = contact.name
+        binding.toolbar.title = ""
         binding.tvDetailName.text = contact.name
         binding.tvDetailPhone.text = contact.phoneNumber
         binding.tvDetailEmail.text = contact.email
 
         contact.photoUri?.let {
             binding.ivDetailPhoto.setImageURI(it.toUri())
-        }
+        } ?: binding.ivDetailPhoto.setImageResource(R.drawable.ic_default_person)
 
         binding.btnCall.setOnClickListener { checkCallPermission() }
-        binding.btnMessage.setOnClickListener { initiateMessage() }
+        binding.btnMessage.setOnClickListener { navigateToChat() }
+        binding.btnEmail.setOnClickListener { initiateEmail() }
     }
 
     private fun checkCallPermission() {
@@ -90,20 +91,40 @@ class ContactDetailFragment : Fragment() {
     private fun initiateCall() {
         val phoneNumber = args.contact.phoneNumber
         if (phoneNumber.isNotBlank()) {
+            val callLog = CallLog(
+                contactName = args.contact.name,
+                phoneNumber = phoneNumber,
+                callType = "OUTGOING",
+                timestamp = System.currentTimeMillis(),
+                duration = 0
+            )
+            contactViewModel.addCallLog(callLog)
+
             val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
             startActivity(intent)
         } else {
-            Toast.makeText(requireContext(), "Phone number is not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.error_no_phone), Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun initiateMessage() {
+    private fun navigateToChat() {
         val phoneNumber = args.contact.phoneNumber
         if (phoneNumber.isNotBlank()) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:$phoneNumber"))
+            // Fix: Directly navigate to ChatFragment using SafeArgs
+            val action = ContactDetailFragmentDirections.actionContactDetailFragmentToChatFragment(phoneNumber)
+            findNavController().navigate(action)
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.error_no_phone), Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun initiateEmail() {
+        val email = args.contact.email
+        if (email.isNotBlank()) {
+            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
             startActivity(intent)
         } else {
-            Toast.makeText(requireContext(), "Phone number is not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Email is not available", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -129,14 +150,14 @@ class ContactDetailFragment : Fragment() {
 
     private fun showDeleteConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Delete Contact")
-            .setMessage("Are you sure you want to delete ${args.contact.name}?")
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setTitle(getString(R.string.delete_contact_title))
+            .setMessage(getString(R.string.delete_contact_msg, args.contact.name))
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton("Delete") { _, _ ->
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 contactViewModel.deleteContact(args.contact)
-                Toast.makeText(context, "${args.contact.name} deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.contact_deleted_toast, args.contact.name), Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
             .show()

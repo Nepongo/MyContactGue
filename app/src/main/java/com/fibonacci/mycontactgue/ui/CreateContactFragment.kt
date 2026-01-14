@@ -1,5 +1,6 @@
 package com.fibonacci.mycontactgue.ui
 
+import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.fibonacci.mycontactgue.ContactsApplication
 import com.fibonacci.mycontactgue.R
 import com.fibonacci.mycontactgue.data.Contact
 import com.fibonacci.mycontactgue.databinding.FragmentCreateContactBinding
+import java.util.*
 
 class CreateContactFragment : Fragment() {
 
@@ -32,12 +34,10 @@ class CreateContactFragment : Fragment() {
         ContactViewModelFactory((activity?.application as ContactsApplication).repository)
     }
 
-    // Activity Result Launcher for picking an image
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             currentPhotoUri = it
             binding.ivNewContactPhoto.setImageURI(it)
-            binding.tvAddPhotoLabel.visibility = View.GONE // Hide label after selecting image
         }
     }
 
@@ -58,8 +58,12 @@ class CreateContactFragment : Fragment() {
         setupToolbar()
         populateFormIfEditing()
 
-        binding.ivNewContactPhoto.setOnClickListener {
+        binding.cvPhotoContainer.setOnClickListener {
             pickImageLauncher.launch("image/*")
+        }
+
+        binding.etBirthday.setOnClickListener {
+            showDatePicker()
         }
 
         binding.btnSave.setOnClickListener {
@@ -82,25 +86,45 @@ class CreateContactFragment : Fragment() {
             binding.etName.setText(it.name)
             binding.etPhone.setText(it.phoneNumber)
             binding.etEmail.setText(it.email)
-            it.photoUri?.let {
-                uriString ->
+            binding.etBirthday.setText(it.birthday)
+            it.photoUri?.let { uriString ->
                 currentPhotoUri = uriString.toUri()
                 binding.ivNewContactPhoto.setImageURI(currentPhotoUri)
-                binding.tvAddPhotoLabel.visibility = View.GONE
             }
+            binding.btnSave.text = getString(R.string.edit_contact_label)
         }
     }
 
-    private fun saveContact() {
-        val name = binding.etName.text.toString()
-        val phone = binding.etPhone.text.toString()
-        val email = binding.etEmail.text.toString()
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        if (name.isBlank()) {
-            binding.tilName.error = "Nama tidak boleh kosong"
+        DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+            binding.etBirthday.setText(date)
+        }, year, month, day).show()
+    }
+
+    private fun saveContact() {
+        val name = binding.etName.text.toString().trim()
+        val phone = binding.etPhone.text.toString().trim()
+        val email = binding.etEmail.text.toString().trim()
+        val birthday = binding.etBirthday.text.toString().trim()
+
+        if (name.isEmpty()) {
+            binding.tilName.error = getString(R.string.error_empty_name)
             return
         } else {
             binding.tilName.error = null
+        }
+
+        if (phone.isEmpty()) {
+            binding.tilPhone.error = getString(R.string.hint_phone) + " is required"
+            return
+        } else {
+            binding.tilPhone.error = null
         }
 
         if (contactToEdit == null) {
@@ -108,20 +132,21 @@ class CreateContactFragment : Fragment() {
                 name = name, 
                 phoneNumber = phone, 
                 email = email, 
-                birthday = "",
+                birthday = birthday,
                 photoUri = currentPhotoUri?.toString()
             )
             contactViewModel.insertContact(newContact)
-            Toast.makeText(context, "Kontak $name disimpan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.contact_saved_toast, name), Toast.LENGTH_SHORT).show()
         } else {
             val updatedContact = contactToEdit!!.copy(
                 name = name, 
                 phoneNumber = phone, 
                 email = email,
+                birthday = birthday,
                 photoUri = currentPhotoUri?.toString()
             )
             contactViewModel.updateContact(updatedContact)
-            Toast.makeText(context, "Kontak $name diperbarui", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.contact_updated_toast, name), Toast.LENGTH_SHORT).show()
         }
 
         findNavController().popBackStack()

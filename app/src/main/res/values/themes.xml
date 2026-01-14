@@ -4,24 +4,33 @@
     <style name="Theme.MyContactGue" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/modern_blue</item>
-        <item name="colorPrimaryVariant">@color/modern_blue</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/soft_blue_bg</item>
+        <item name="colorOnPrimaryContainer">@color/modern_blue_dark</item>
+        
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/modern_blue</item>
-        <item name="colorSecondaryVariant">@color/modern_blue</item>
         <item name="colorOnSecondary">@color/white</item>
         
-        <!-- Text colors -->
-        <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:textColorHint">@color/light_gray</item>
+        <!-- Accent color -->
+        <item name="colorAccent">@color/modern_blue</item>
         
         <!-- Background and surface colors -->
         <item name="android:windowBackground">@color/off_white</item>
         <item name="colorSurface">@color/off_white</item>
         <item name="colorOnSurface">@color/dark_gray</item>
+        <item name="colorOutline">@color/color_outline</item>
+        <item name="colorSurfaceVariant">@color/soft_blue_bg</item>
+
+        <!-- Status bar and Navigation bar -->
+        <item name="android:statusBarColor">@color/modern_blue</item>
+        <item name="android:navigationBarColor">@color/white</item>
+
+        <!-- No more default purple! -->
+        <item name="colorPrimaryVariant" tools:targetApi="l">@color/modern_blue_dark</item>
+        <item name="colorSecondaryVariant">@color/modern_blue_dark</item>
     </style>
 
-    <!-- Style for Circular Images -->
     <style name="CircleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

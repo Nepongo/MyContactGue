@@ -29,17 +29,27 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_detail_photo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_detail_photo_container"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:layout_marginTop="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_default_person"
+                app:cardCornerRadius="70dp"
+                app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/CircleImageView" />
+                app:strokeColor="@color/white"
+                app:strokeWidth="4dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_detail_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_default_person"
+                    app:shapeAppearance="@style/CircleImageView" />
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tv_detail_name"
@@ -47,9 +57,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                app:layout_constraintEnd_toEndOf="@+id/iv_detail_photo"
-                app:layout_constraintStart_toStartOf="@+id/iv_detail_photo"
-                app:layout_constraintTop_toBottomOf="@+id/iv_detail_photo"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_detail_photo_container"
                 tools:text="Dudur Fauzanovich" />
 
             <!-- Action Buttons -->
@@ -57,7 +68,7 @@
                 android:id="@+id/ll_actions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:orientation="horizontal"
                 android:weightSum="3" 
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +82,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Call"
-                    app:icon="@android:drawable/ic_menu_call" />
+                    android:textSize="12sp"
+                    app:icon="@android:drawable/ic_menu_call"
+                    app:iconPadding="4dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_message"
@@ -82,7 +95,9 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="Message"
-                    app:icon="@android:drawable/ic_menu_send" />
+                    android:textSize="12sp"
+                    app:icon="@android:drawable/ic_menu_send"
+                    app:iconPadding="4dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_email"
@@ -91,18 +106,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Email"
-                    app:icon="@android:drawable/ic_dialog_email" />
+                    android:textSize="12sp"
+                    app:icon="@android:drawable/ic_dialog_email"
+                    app:iconPadding="4dp" />
 
             </LinearLayout>
 
-            <!-- Phone Number Card -->
+            <!-- Info Cards -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_actions">
@@ -116,8 +133,9 @@
                         android:id="@+id/tv_phone_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Phone Numbers"
+                        android:text="Mobile"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:textColor="?attr/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -127,7 +145,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:textAppearance="?attr/textAppearanceBodyLarge"
-                        android:textColor="?attr/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_phone_label"
                         tools:text="+62 812 3456 7890" />
@@ -135,14 +152,13 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Email Address Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_phone">
@@ -156,8 +172,9 @@
                         android:id="@+id/tv_email_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Email Address"
+                        android:text="Email"
                         android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:textColor="?attr/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -167,7 +184,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:textAppearance="?attr/textAppearanceBodyLarge"
-                        android:textColor="?attr/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_email_label"
                         tools:text="dudur@fauzan.com" />
