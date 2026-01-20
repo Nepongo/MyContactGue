@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -34,6 +35,16 @@ class ChatFragment : Fragment() {
         ContactViewModelFactory((activity?.application as ContactsApplication).repository)
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            sendSms()
+        } else {
+            Toast.makeText(requireContext(), "Permission denied to send SMS", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,7 +66,7 @@ class ChatFragment : Fragment() {
         loadConversation()
 
         binding.btnSendChat.setOnClickListener {
-            sendSms()
+            checkPermissionAndSend()
         }
     }
 
@@ -63,7 +74,6 @@ class ChatFragment : Fragment() {
         contactViewModel.allContacts.observe(viewLifecycleOwner) { contacts ->
             val normalizedInput = args.phoneNumber.replace("[^0-9]".toRegex(), "")
             
-            // Fixed logic: Don't resolve if input is non-numeric or normalization yields empty string
             if (normalizedInput.isEmpty() || !args.phoneNumber.any { it.isDigit() }) {
                 binding.tvChatName.text = args.phoneNumber
                 return@observe
@@ -116,20 +126,30 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun sendSms() {
+    private fun checkPermissionAndSend() {
         val message = binding.etChatMessage.text.toString().trim()
         if (message.isEmpty()) return
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-            try {
-                val smsManager: SmsManager = requireContext().getSystemService(SmsManager::class.java)
-                smsManager.sendTextMessage(args.phoneNumber, null, message, null, null)
-                Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show()
-                binding.etChatMessage.setText("")
-                binding.root.postDelayed({ loadConversation() }, 1000)
-            } catch (e: Exception) {
-                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            sendSms()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.SEND_SMS)
+        }
+    }
+
+    private fun sendSms() {
+        val message = binding.etChatMessage.text.toString().trim()
+        if (message.isEmpty()) return
+
+        try {
+            val smsManager: SmsManager = requireContext().getSystemService(SmsManager::class.java)
+            smsManager.sendTextMessage(args.phoneNumber, null, message, null, null)
+            Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show()
+            binding.etChatMessage.setText("")
+            // Small delay before reloading to allow the system to write the message to the provider
+            binding.root.postDelayed({ loadConversation() }, 1000)
+        } catch (e: Exception) {
+            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
